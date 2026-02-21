@@ -1,0 +1,71 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import api from "@/lib/api";
+import type { DashboardData, Contact } from "@/lib/types";
+
+export default function DashboardPage() {
+  const [data, setData] = useState<DashboardData | null>(null);
+
+  useEffect(() => {
+    api.get("/dashboard").then((r) => setData(r.data)).catch(() => {});
+  }, []);
+
+  if (!data) return <div className="text-[#636e72]">Loading...</div>;
+
+  const contactMap = new Map<string, Contact>();
+  data.contacts.forEach((c) => contactMap.set(c.id, c));
+
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-[#1b4332] mb-6">Dashboard</h1>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <StatCard label="Total Contacts" value={data.totalContacts} />
+        <StatCard label="Mowing Today" value={data.mowingClients} />
+        <StatCard label="Contracting Today" value={data.contractingClients} />
+        <StatCard label="Pending Bookings" value={data.pendingBookings} />
+        <StatCard label="Unread Messages" value={data.unreadMessages} />
+        <StatCard label="Blog Posts" value={data.totalBlogPosts} />
+      </div>
+
+      <h2 className="text-xl font-semibold text-[#2d6a4f] mb-4">Today&apos;s Work</h2>
+      {data.todayEntries.length === 0 ? (
+        <p className="text-[#636e72] bg-white p-4 rounded-lg border border-[#d8e4dc]">No jobs today.</p>
+      ) : (
+        <div className="bg-white rounded-lg border border-[#d8e4dc] overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-[#f0f4f1]">
+              <tr>
+                <th className="text-left p-3 text-sm font-medium text-[#2d3436]">Contact</th>
+                <th className="text-left p-3 text-sm font-medium text-[#2d3436]">Mowing</th>
+                <th className="text-left p-3 text-sm font-medium text-[#2d3436]">Contracting</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.todayEntries.map((e, i) => {
+                const contact = contactMap.get(e.contactId);
+                return (
+                  <tr key={i} className="border-t border-[#d8e4dc]">
+                    <td className="p-3">{contact ? `${contact.firstName} ${contact.lastName}` : e.contactId}</td>
+                    <td className="p-3">{e.mowing ? <span className="text-[#40916c] font-medium">Yes</span> : "—"}</td>
+                    <td className="p-3">{e.contracting ? <span className="text-[#40916c] font-medium">Yes</span> : "—"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StatCard({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="bg-white rounded-lg p-4 shadow-sm border border-[#d8e4dc]">
+      <p className="text-sm text-[#636e72]">{label}</p>
+      <p className="text-2xl font-bold text-[#2d6a4f]">{value}</p>
+    </div>
+  );
+}
