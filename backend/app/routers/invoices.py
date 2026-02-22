@@ -30,6 +30,12 @@ def _invoice_to_dict(inv: Invoice) -> dict:
     }
 
 
+@router.get("/")
+def list_invoices(db: Session = Depends(get_db), _=Depends(get_current_admin)):
+    invoices = db.query(Invoice).order_by(Invoice.created_at.desc()).all()
+    return {"invoices": [_invoice_to_dict(inv) for inv in invoices]}
+
+
 @router.get("/{invoice_id}")
 def get_invoice(invoice_id: str, db: Session = Depends(get_db), _=Depends(get_current_admin)):
     invoice = db.query(Invoice).filter(Invoice.id == invoice_id).first()
