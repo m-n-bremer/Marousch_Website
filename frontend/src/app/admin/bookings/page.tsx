@@ -8,7 +8,7 @@ import type { Booking } from "@/lib/types";
 const STATUS_COLORS: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-800",
   confirmed: "bg-blue-100 text-blue-800",
-  completed: "bg-[#b7e4c7] text-[#1b4332]",
+  completed: "bg-[#fce588] text-[#1a1a1a]",
   cancelled: "bg-red-100 text-red-800",
 };
 
@@ -31,32 +31,32 @@ export default function AdminBookingsPage() {
     load();
   };
 
-  if (!bookings) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
+  if (!bookings) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#e0d5b8] border-t-[#b8860b]" /></div>;
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-[#1b4332] mb-6">Bookings</h1>
+      <h1 className="text-3xl font-bold text-[#1a1a1a] mb-6">Bookings</h1>
       {bookings.length === 0 ? (
-        <p className="text-[#636e72] bg-white p-4 rounded-lg border border-[#d8e4dc]">No bookings yet.</p>
+        <p className="text-[#6b6350] bg-white p-4 rounded-lg border border-[#e0d5b8]">No bookings yet.</p>
       ) : (
         <div className="space-y-3">
           {bookings.map((b) => (
-            <div key={b.id} className="bg-white rounded-lg p-4 border border-[#d8e4dc]">
+            <div key={b.id} className="bg-white rounded-lg p-4 border border-[#e0d5b8]">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="font-semibold text-[#2d6a4f]">{b.client_name}</h3>
-                  <p className="text-sm text-[#636e72]">{b.client_email} {b.client_phone && `| ${b.client_phone}`}</p>
+                  <h3 className="font-semibold text-[#b8860b]">{b.client_name}</h3>
+                  <p className="text-sm text-[#6b6350]">{b.client_email} {b.client_phone && `| ${b.client_phone}`}</p>
                 </div>
                 <span className={`text-xs px-2 py-1 rounded ${STATUS_COLORS[b.status] || "bg-gray-100"}`}>{b.status}</span>
               </div>
-              {b.address && <p className="text-sm text-[#636e72] mb-1">Address: {b.address}</p>}
-              {b.preferred_date && <p className="text-sm text-[#636e72] mb-1">Preferred: {b.preferred_date} {b.preferred_time}</p>}
-              {b.message && <p className="text-sm text-[#2d3436] mb-2">{b.message}</p>}
+              {b.address && <p className="text-sm text-[#6b6350] mb-1">Address: {b.address}</p>}
+              {b.preferred_date && <p className="text-sm text-[#6b6350] mb-1">Preferred: {b.preferred_date} {b.preferred_time}</p>}
+              {b.message && <p className="text-sm text-[#2d2d2d] mb-2">{b.message}</p>}
               <div className="flex gap-2 mt-2">
                 {["pending", "confirmed", "completed", "cancelled"].map((s) => (
                   s !== b.status && (
                     <button key={s} onClick={() => updateStatus(b.id, s)}
-                      className="text-xs border border-[#d8e4dc] px-2 py-1 rounded hover:bg-[#f0f4f1]">{s}</button>
+                      className="text-xs border border-[#e0d5b8] px-2 py-1 rounded hover:bg-[#f9f5e8]">{s}</button>
                   )
                 ))}
                 <button onClick={() => remove(b.id)} className="text-xs text-red-500 hover:text-red-700 ml-auto">Delete</button>

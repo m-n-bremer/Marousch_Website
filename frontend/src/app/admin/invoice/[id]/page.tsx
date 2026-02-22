@@ -51,39 +51,39 @@ export default function InvoicePage({ params }: { params: Promise<{ id: string }
     }
   };
 
-  if (!invoice) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
+  if (!invoice) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#e0d5b8] border-t-[#b8860b]" /></div>;
 
   return (
     <div className="max-w-3xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-[#1b4332]">
+        <h1 className="text-3xl font-bold text-[#1a1a1a]">
           {invoice.headline || "Invoice"}
         </h1>
-        <button onClick={() => router.push("/admin/work")} className="text-[#2d6a4f] hover:text-[#52b788]">&larr; Back to Work</button>
+        <button onClick={() => router.push("/admin/work")} className="text-[#b8860b] hover:text-[#d4a017]">&larr; Back to Work</button>
       </div>
 
-      <div className="bg-white rounded-lg p-6 border border-[#d8e4dc] mb-6">
+      <div className="bg-white rounded-lg p-6 border border-[#e0d5b8] mb-6">
         <div className="flex justify-between mb-6">
           <div>
-            <h2 className="font-bold text-[#1b4332] text-lg">Marousch Brothers Landscaping</h2>
-            <p className="text-sm text-[#636e72]">Norton, Ohio</p>
+            <h2 className="font-bold text-[#1a1a1a] text-lg">Marousch Brothers Landscaping</h2>
+            <p className="text-sm text-[#6b6350]">Norton, Ohio</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-[#636e72]">Date: {invoice.createdDate}</p>
-            <p className="text-sm text-[#636e72]">ID: {invoice.invoiceId}</p>
+            <p className="text-sm text-[#6b6350]">Date: {invoice.createdDate}</p>
+            <p className="text-sm text-[#6b6350]">ID: {invoice.invoiceId}</p>
           </div>
         </div>
 
         {contact && (
-          <div className="mb-6 p-4 bg-[#f0f4f1] rounded-lg">
+          <div className="mb-6 p-4 bg-[#f9f5e8] rounded-lg">
             <p className="font-medium">Bill To: {contact.firstName} {contact.lastName}</p>
-            {contact.primaryPhone && <p className="text-sm text-[#636e72]">Phone: {contact.primaryPhone}</p>}
+            {contact.primaryPhone && <p className="text-sm text-[#6b6350]">Phone: {contact.primaryPhone}</p>}
           </div>
         )}
 
         <table className="w-full mb-4">
           <thead>
-            <tr className="border-b border-[#d8e4dc]">
+            <tr className="border-b border-[#e0d5b8]">
               <th className="text-left py-2 text-sm">Description</th>
               <th className="text-right py-2 text-sm w-32">Amount</th>
               <th className="w-10"></th>
@@ -91,14 +91,14 @@ export default function InvoicePage({ params }: { params: Promise<{ id: string }
           </thead>
           <tbody>
             {lineItems.map((li, i) => (
-              <tr key={i} className="border-b border-[#d8e4dc]">
+              <tr key={i} className="border-b border-[#e0d5b8]">
                 <td className="py-2">
                   <input value={li.description} onChange={(e) => updateLine(i, "description", e.target.value)}
-                    className="w-full border border-[#d8e4dc] rounded px-2 py-1 text-sm" />
+                    className="w-full border border-[#e0d5b8] rounded px-2 py-1 text-sm" />
                 </td>
                 <td className="py-2">
                   <input type="number" value={li.amount} onChange={(e) => updateLine(i, "amount", parseFloat(e.target.value) || 0)}
-                    className="w-full border border-[#d8e4dc] rounded px-2 py-1 text-sm text-right" />
+                    className="w-full border border-[#e0d5b8] rounded px-2 py-1 text-sm text-right" />
                 </td>
                 <td className="py-2 text-center">
                   <button onClick={() => removeLine(i)} className="text-red-500 text-sm">X</button>
@@ -108,24 +108,24 @@ export default function InvoicePage({ params }: { params: Promise<{ id: string }
           </tbody>
         </table>
 
-        <button onClick={addLine} className="text-[#2d6a4f] text-sm hover:text-[#52b788] mb-4">+ Add Line Item</button>
+        <button onClick={addLine} className="text-[#b8860b] text-sm hover:text-[#d4a017] mb-4">+ Add Line Item</button>
 
         {!invoice.headline && (
           <div className="mb-4">
-            <label className="block text-sm font-medium text-[#2d3436] mb-1">Additional Job Details</label>
+            <label className="block text-sm font-medium text-[#2d2d2d] mb-1">Additional Job Details</label>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
-              className="w-full border border-[#d8e4dc] rounded px-3 py-2 text-sm" />
+              className="w-full border border-[#e0d5b8] rounded px-3 py-2 text-sm" />
           </div>
         )}
 
-        <div className="text-right text-xl font-bold text-[#2d6a4f] border-t border-[#d8e4dc] pt-4">
+        <div className="text-right text-xl font-bold text-[#b8860b] border-t border-[#e0d5b8] pt-4">
           Total: ${total.toFixed(2)}
         </div>
       </div>
 
       <div className="flex gap-3">
-        <button onClick={save} className="bg-[#2d6a4f] hover:bg-[#1b4332] text-white px-6 py-2 rounded-lg font-medium">Save Invoice</button>
-        <button onClick={send} className="bg-[#52b788] hover:bg-[#40916c] text-white px-6 py-2 rounded-lg font-medium">Send via SMS</button>
+        <button onClick={save} className="bg-[#b8860b] hover:bg-[#1a1a1a] text-white px-6 py-2 rounded-lg font-medium">Save Invoice</button>
+        <button onClick={send} className="bg-[#d4a017] hover:bg-[#9a7209] text-white px-6 py-2 rounded-lg font-medium">Send via SMS</button>
       </div>
     </div>
   );

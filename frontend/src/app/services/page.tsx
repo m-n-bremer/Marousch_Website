@@ -21,19 +21,19 @@ export default async function ServicesPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-16">
-      <h1 className="text-4xl font-bold text-[#1b4332] mb-4">Our Services</h1>
-      <p className="text-[#636e72] mb-12 text-lg">Full range of landscaping and contracting services.</p>
+      <h1 className="text-4xl font-bold text-[#1a1a1a] mb-4">Our Services</h1>
+      <p className="text-[#6b6350] mb-12 text-lg">Full range of landscaping and contracting services.</p>
       {services.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg border border-[#d8e4dc]">
-          <p className="text-[#636e72]">Services coming soon. Contact us for more information.</p>
+        <div className="text-center py-12 bg-white rounded-lg border border-[#e0d5b8]">
+          <p className="text-[#6b6350]">Services coming soon. Contact us for more information.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((s) => (
             <Link key={s.id} href={`/services/${s.slug}`}
-              className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border border-[#d8e4dc] group">
-              <h2 className="text-xl font-semibold text-[#2d6a4f] mb-2 group-hover:text-[#52b788]">{s.title}</h2>
-              {s.short_description && <p className="text-[#636e72]">{s.short_description}</p>}
+              className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border border-[#e0d5b8] group">
+              <h2 className="text-xl font-semibold text-[#b8860b] mb-2 group-hover:text-[#d4a017]">{s.title}</h2>
+              {s.short_description && <p className="text-[#6b6350]">{s.short_description}</p>}
             </Link>
           ))}
         </div>

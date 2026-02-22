@@ -19,25 +19,25 @@ export default function AdminBlogPage() {
     load();
   };
 
-  if (!posts) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
+  if (!posts) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#e0d5b8] border-t-[#b8860b]" /></div>;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-[#1b4332]">Blog Posts</h1>
-        <Link href="/admin/blog/new" className="bg-[#2d6a4f] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1b4332]">+ New Post</Link>
+        <h1 className="text-3xl font-bold text-[#1a1a1a]">Blog Posts</h1>
+        <Link href="/admin/blog/new" className="bg-[#b8860b] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#1a1a1a]">+ New Post</Link>
       </div>
       <div className="space-y-3">
         {posts.map((p) => (
-          <div key={p.id} className="bg-white rounded-lg p-4 border border-[#d8e4dc] flex justify-between items-center">
+          <div key={p.id} className="bg-white rounded-lg p-4 border border-[#e0d5b8] flex justify-between items-center">
             <div>
-              <h3 className="font-semibold text-[#2d6a4f]">{p.title}</h3>
-              <span className={`text-xs px-2 py-0.5 rounded ${p.status === "published" ? "bg-[#b7e4c7] text-[#1b4332]" : "bg-gray-200 text-gray-600"}`}>
+              <h3 className="font-semibold text-[#b8860b]">{p.title}</h3>
+              <span className={`text-xs px-2 py-0.5 rounded ${p.status === "published" ? "bg-[#fce588] text-[#1a1a1a]" : "bg-gray-200 text-gray-600"}`}>
                 {p.status}
               </span>
             </div>
             <div className="flex gap-2">
-              <Link href={`/admin/blog/${p.id}/edit`} className="text-[#2d6a4f] text-sm hover:text-[#52b788]">Edit</Link>
+              <Link href={`/admin/blog/${p.id}/edit`} className="text-[#b8860b] text-sm hover:text-[#d4a017]">Edit</Link>
               <button onClick={() => remove(p.id)} className="text-red-500 text-sm hover:text-red-700">Delete</button>
             </div>
           </div>

@@ -52,8 +52,8 @@ export default function AdminSidebar() {
         className={cn(
           "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
           active
-            ? "bg-[#2d6a4f] text-white"
-            : "text-[#d8e4dc] hover:bg-[#2d6a4f]/50 hover:text-white"
+            ? "bg-[#b8860b] text-white"
+            : "text-[#e0d5b8] hover:bg-[#b8860b]/50 hover:text-white"
         )}
       >
         <Icon className="h-5 w-5" />
@@ -63,20 +63,20 @@ export default function AdminSidebar() {
   };
 
   return (
-    <aside className="w-64 bg-[#1b4332] min-h-screen p-4 flex flex-col">
+    <aside className="w-64 bg-[#1a1a1a] min-h-screen p-4 flex flex-col">
       <Link href="/admin/dashboard" className="text-white font-bold text-lg mb-6 px-3">
         Marousch Admin
       </Link>
       <div className="space-y-1">
-        <p className="text-xs uppercase text-[#95d5b2] font-semibold px-3 mb-2">Operations</p>
+        <p className="text-xs uppercase text-[#e6c34d] font-semibold px-3 mb-2">Operations</p>
         {opsLinks.map(renderLink)}
       </div>
       <div className="mt-6 space-y-1">
-        <p className="text-xs uppercase text-[#95d5b2] font-semibold px-3 mb-2">Website</p>
+        <p className="text-xs uppercase text-[#e6c34d] font-semibold px-3 mb-2">Website</p>
         {websiteLinks.map(renderLink)}
       </div>
-      <div className="mt-auto pt-4 border-t border-[#2d6a4f]">
-        <Link href="/" className="text-sm text-[#95d5b2] hover:text-white px-3">
+      <div className="mt-auto pt-4 border-t border-[#b8860b]">
+        <Link href="/" className="text-sm text-[#e6c34d] hover:text-white px-3">
           &larr; Back to Website
         </Link>
       </div>

@@ -23,7 +23,7 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2d6a4f]" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#b8860b]" />
       </div>
     );
   }
@@ -33,7 +33,7 @@ function AdminGuard({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="flex-1 p-6 bg-[#f0f4f1]">{children}</div>
+      <div className="flex-1 p-6 bg-[#f9f5e8]">{children}</div>
     </div>
   );
 }

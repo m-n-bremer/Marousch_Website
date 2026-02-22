@@ -20,17 +20,17 @@ export default async function BlogPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="text-4xl font-bold text-[#1b4332] mb-8">Blog</h1>
+      <h1 className="text-4xl font-bold text-[#1a1a1a] mb-8">Blog</h1>
       {posts.length === 0 ? (
-        <p className="text-[#636e72] text-center py-12 bg-white rounded-lg border border-[#d8e4dc]">No posts yet.</p>
+        <p className="text-[#6b6350] text-center py-12 bg-white rounded-lg border border-[#e0d5b8]">No posts yet.</p>
       ) : (
         <div className="space-y-6">
           {posts.map((post) => (
             <Link key={post.id} href={`/blog/${post.slug}`}
-              className="block bg-white rounded-lg p-6 shadow-sm border border-[#d8e4dc] hover:shadow-md transition-shadow">
-              <h2 className="text-xl font-semibold text-[#2d6a4f] mb-2">{post.title}</h2>
-              {post.published_at && <p className="text-sm text-[#636e72] mb-2">{formatDate(post.published_at)}</p>}
-              {post.excerpt && <p className="text-[#2d3436]">{post.excerpt}</p>}
+              className="block bg-white rounded-lg p-6 shadow-sm border border-[#e0d5b8] hover:shadow-md transition-shadow">
+              <h2 className="text-xl font-semibold text-[#b8860b] mb-2">{post.title}</h2>
+              {post.published_at && <p className="text-sm text-[#6b6350] mb-2">{formatDate(post.published_at)}</p>}
+              {post.excerpt && <p className="text-[#2d2d2d]">{post.excerpt}</p>}
             </Link>
           ))}
         </div>
