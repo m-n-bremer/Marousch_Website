@@ -56,17 +56,17 @@ export default function CalendarPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-[#1a1a1a] mb-6">Calendar</h1>
+      <h1 className="text-3xl font-bold text-[#1b4332] mb-6">Calendar</h1>
 
       <div className="flex items-center justify-between mb-4">
-        <button onClick={prevMonth} className="bg-white border border-[#e0d5b8] px-4 py-2 rounded-lg hover:bg-[#f9f5e8]">&larr; Prev</button>
-        <h2 className="text-xl font-semibold text-[#b8860b]">{monthName} {year}</h2>
-        <button onClick={nextMonth} className="bg-white border border-[#e0d5b8] px-4 py-2 rounded-lg hover:bg-[#f9f5e8]">Next &rarr;</button>
+        <button onClick={prevMonth} className="bg-white border border-[#d8e4dc] px-4 py-2 rounded-lg hover:bg-[#f0f4f1]">&larr; Prev</button>
+        <h2 className="text-xl font-semibold text-[#2d6a4f]">{monthName} {year}</h2>
+        <button onClick={nextMonth} className="bg-white border border-[#d8e4dc] px-4 py-2 rounded-lg hover:bg-[#f0f4f1]">Next &rarr;</button>
       </div>
 
       <div className="grid grid-cols-7 gap-1 mb-6">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-          <div key={d} className="text-center text-sm font-medium text-[#6b6350] py-2">{d}</div>
+          <div key={d} className="text-center text-sm font-medium text-[#636e72] py-2">{d}</div>
         ))}
         {Array.from({ length: firstDayOfWeek }).map((_, i) => <div key={`empty-${i}`} />)}
         {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
@@ -74,14 +74,14 @@ export default function CalendarPage() {
           const isToday = day === now.getDate() && month === now.getMonth() + 1 && year === now.getFullYear();
           return (
             <div key={day} onClick={() => setSelectedDay(day)}
-              className={`bg-white border rounded-lg p-2 min-h-[80px] cursor-pointer hover:border-[#d4a017] ${
-                isToday ? "border-[#d4a017] border-2" : "border-[#e0d5b8]"
-              } ${selectedDay === day ? "ring-2 ring-[#d4a017]" : ""}`}>
+              className={`bg-white border rounded-lg p-2 min-h-[80px] cursor-pointer hover:border-[#52b788] ${
+                isToday ? "border-[#52b788] border-2" : "border-[#d8e4dc]"
+              } ${selectedDay === day ? "ring-2 ring-[#52b788]" : ""}`}>
               <span className="text-sm font-medium">{day}</span>
               {dayJobs.map((j) => {
                 const c = contactMap.get(j.contactId);
                 return (
-                  <div key={j.id} className="text-xs bg-[#fce588] text-[#1a1a1a] rounded px-1 mt-1 truncate">
+                  <div key={j.id} className="text-xs bg-[#b7e4c7] text-[#1b4332] rounded px-1 mt-1 truncate">
                     {c ? c.firstName : "?"}: {j.description || "Job"}
                   </div>
                 );
@@ -92,14 +92,14 @@ export default function CalendarPage() {
       </div>
 
       {selectedDay !== null && (
-        <div className="bg-white rounded-lg p-6 border border-[#e0d5b8]">
-          <h3 className="font-semibold text-[#b8860b] mb-4">
+        <div className="bg-white rounded-lg p-6 border border-[#d8e4dc]">
+          <h3 className="font-semibold text-[#2d6a4f] mb-4">
             {monthName} {selectedDay}, {year}
           </h3>
           {getJobsForDay(selectedDay).map((j) => {
             const c = contactMap.get(j.contactId);
             return (
-              <div key={j.id} className="flex items-center justify-between py-2 border-b border-[#e0d5b8]">
+              <div key={j.id} className="flex items-center justify-between py-2 border-b border-[#d8e4dc]">
                 <span>{c ? `${c.firstName} ${c.lastName}` : j.contactId} — {j.description || "No description"}</span>
                 <button onClick={() => deleteJob(j.id)} className="text-red-500 text-sm hover:text-red-700">Delete</button>
               </div>
@@ -107,13 +107,13 @@ export default function CalendarPage() {
           })}
           <div className="mt-4 flex gap-2">
             <select value={newJobContact} onChange={(e) => setNewJobContact(e.target.value)}
-              className="border border-[#e0d5b8] rounded px-3 py-2 text-sm flex-1">
+              className="border border-[#d8e4dc] rounded px-3 py-2 text-sm flex-1">
               <option value="">Select contact</option>
               {contacts.map((c) => <option key={c.id} value={c.id}>{c.firstName} {c.lastName}</option>)}
             </select>
             <input value={newJobDesc} onChange={(e) => setNewJobDesc(e.target.value)} placeholder="Description"
-              className="border border-[#e0d5b8] rounded px-3 py-2 text-sm flex-1" />
-            <button onClick={addJob} className="bg-[#b8860b] text-white px-4 py-2 rounded text-sm hover:bg-[#1a1a1a]">Add</button>
+              className="border border-[#d8e4dc] rounded px-3 py-2 text-sm flex-1" />
+            <button onClick={addJob} className="bg-[#2d6a4f] text-white px-4 py-2 rounded text-sm hover:bg-[#1b4332]">Add</button>
           </div>
         </div>
       )}

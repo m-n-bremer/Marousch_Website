@@ -41,35 +41,35 @@ export default function ContactsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-[#1a1a1a]">Contacts</h1>
+        <h1 className="text-3xl font-bold text-[#1b4332]">Contacts</h1>
         <div className="flex gap-2">
-          <button onClick={addContact} className="bg-[#d4a017] hover:bg-[#9a7209] text-white px-4 py-2 rounded-lg text-sm font-medium">+ Add Contact</button>
-          <button onClick={save} className="bg-[#b8860b] hover:bg-[#1a1a1a] text-white px-4 py-2 rounded-lg text-sm font-medium">Save Changes</button>
+          <button onClick={addContact} className="bg-[#52b788] hover:bg-[#40916c] text-white px-4 py-2 rounded-lg text-sm font-medium">+ Add Contact</button>
+          <button onClick={save} className="bg-[#2d6a4f] hover:bg-[#1b4332] text-white px-4 py-2 rounded-lg text-sm font-medium">Save Changes</button>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-[#e0d5b8] overflow-x-auto">
+      <div className="bg-white rounded-lg border border-[#d8e4dc] overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-[#f9f5e8]">
+          <thead className="bg-[#f0f4f1]">
             <tr>
               {["First Name", "Last Name", "Phone", "Address", "Email", ""].map((h) => (
-                <th key={h} className="text-left p-3 text-sm font-medium text-[#2d2d2d]">{h}</th>
+                <th key={h} className="text-left p-3 text-sm font-medium text-[#2d3436]">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {contacts.map((c, i) => (
-              <tr key={c.id} className="border-t border-[#e0d5b8]">
+              <tr key={c.id} className="border-t border-[#d8e4dc]">
                 <td className="p-2"><input value={c.firstName} onChange={(e) => updateField(i, "firstName", e.target.value)}
-                  className="w-full border border-[#e0d5b8] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#d4a017]" /></td>
+                  className="w-full border border-[#d8e4dc] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#52b788]" /></td>
                 <td className="p-2"><input value={c.lastName} onChange={(e) => updateField(i, "lastName", e.target.value)}
-                  className="w-full border border-[#e0d5b8] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#d4a017]" /></td>
+                  className="w-full border border-[#d8e4dc] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#52b788]" /></td>
                 <td className="p-2"><input value={c.primaryPhone} onChange={(e) => updateField(i, "primaryPhone", e.target.value)}
-                  className="w-full border border-[#e0d5b8] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#d4a017]" /></td>
+                  className="w-full border border-[#d8e4dc] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#52b788]" /></td>
                 <td className="p-2"><input value={c.address} onChange={(e) => updateField(i, "address", e.target.value)}
-                  className="w-full border border-[#e0d5b8] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#d4a017]" /></td>
+                  className="w-full border border-[#d8e4dc] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#52b788]" /></td>
                 <td className="p-2"><input value={c.email} onChange={(e) => updateField(i, "email", e.target.value)}
-                  className="w-full border border-[#e0d5b8] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#d4a017]" /></td>
+                  className="w-full border border-[#d8e4dc] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#52b788]" /></td>
                 <td className="p-2">
                   <button onClick={() => removeContact(i)} className="text-red-500 hover:text-red-700 text-sm">Delete</button>
                 </td>

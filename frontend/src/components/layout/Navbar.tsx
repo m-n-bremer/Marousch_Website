@@ -18,7 +18,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="bg-[#1a1a1a] text-white sticky top-0 z-50">
+    <nav className="bg-[#1b4332] text-white sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="text-xl font-bold tracking-tight">
@@ -29,7 +29,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:text-[#e6c34d] transition-colors text-sm font-medium"
+                className="hover:text-[#95d5b2] transition-colors text-sm font-medium"
               >
                 {link.label}
               </Link>
@@ -50,7 +50,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="block py-2 hover:text-[#e6c34d] transition-colors"
+              className="block py-2 hover:text-[#95d5b2] transition-colors"
               onClick={() => setOpen(false)}
             >
               {link.label}
