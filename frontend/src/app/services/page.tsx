@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import type { Service } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "Services | Marousch Brothers Contracting",
+  title: "Services | Marousch Brothers Landscaping",
 };
 
 async function getServices(): Promise<Service[]> {

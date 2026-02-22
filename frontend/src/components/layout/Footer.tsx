@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-bold mb-4">Marousch Brothers Contracting</h3>
+            <h3 className="text-lg font-bold mb-4">Marousch Brothers Landscaping</h3>
             <p className="text-[#95d5b2] text-sm">
               Professional landscaping and contracting services in Norton, Ohio.
             </p>
@@ -29,7 +29,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-[#2d6a4f] mt-8 pt-8 text-center text-sm text-[#95d5b2]">
-          &copy; {new Date().getFullYear()} Marousch Brothers Contracting. All rights reserved.
+          &copy; {new Date().getFullYear()} Marousch Brothers Landscaping. All rights reserved.
         </div>
       </div>
     </footer>

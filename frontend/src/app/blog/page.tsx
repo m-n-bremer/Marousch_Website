@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import type { BlogPost } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 
-export const metadata: Metadata = { title: "Blog | Marousch Brothers Contracting" };
+export const metadata: Metadata = { title: "Blog | Marousch Brothers Landscaping" };
 
 async function getPosts(): Promise<BlogPost[]> {
   try {

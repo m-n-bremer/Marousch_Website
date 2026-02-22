@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { Testimonial } from "@/lib/types";
 
-export const metadata: Metadata = { title: "Testimonials | Marousch Brothers Contracting" };
+export const metadata: Metadata = { title: "Testimonials | Marousch Brothers Landscaping" };
 
 async function getTestimonials(): Promise<Testimonial[]> {
   try {

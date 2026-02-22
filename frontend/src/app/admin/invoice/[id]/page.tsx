@@ -65,7 +65,7 @@ export default function InvoicePage({ params }: { params: Promise<{ id: string }
       <div className="bg-white rounded-lg p-6 border border-[#d8e4dc] mb-6">
         <div className="flex justify-between mb-6">
           <div>
-            <h2 className="font-bold text-[#1b4332] text-lg">Marousch Brothers Contracting</h2>
+            <h2 className="font-bold text-[#1b4332] text-lg">Marousch Brothers Landscaping</h2>
             <p className="text-sm text-[#636e72]">Norton, Ohio</p>
           </div>
           <div className="text-right">

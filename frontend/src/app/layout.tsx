@@ -11,7 +11,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Marousch Brothers Contracting | Landscaping & Contracting",
+  title: "Marousch Brothers Landscaping | Landscaping & Contracting",
   description:
     "Professional landscaping and contracting services in Norton, Ohio. Mowing, hardscaping, and general contracting by Marousch Brothers.",
 };
