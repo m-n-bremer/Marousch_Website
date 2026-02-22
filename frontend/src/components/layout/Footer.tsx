@@ -8,7 +8,7 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-bold mb-4">Marousch Brothers Landscaping</h3>
             <p className="text-[#e6c34d] text-sm">
-              Professional landscaping and contracting services in Norton, Ohio.
+              Professional landscaping and contracting services in Summit County.
             </p>
           </div>
           <div>
@@ -23,7 +23,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Contact Info</h4>
             <ul className="space-y-2 text-sm text-[#e6c34d]">
-              <li>Norton, Ohio</li>
+              <li>Summit County, Ohio</li>
               <li>Mike &amp; Randy Marousch</li>
             </ul>
           </div>

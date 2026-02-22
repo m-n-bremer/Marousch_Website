@@ -66,7 +66,7 @@ export default function InvoicePage({ params }: { params: Promise<{ id: string }
         <div className="flex justify-between mb-6">
           <div>
             <h2 className="font-bold text-[#1a1a1a] text-lg">Marousch Brothers Landscaping</h2>
-            <p className="text-sm text-[#6b6350]">Norton, Ohio</p>
+            <p className="text-sm text-[#6b6350]">Summit County, Ohio</p>
           </div>
           <div className="text-right">
             <p className="text-sm text-[#6b6350]">Date: {invoice.createdDate}</p>

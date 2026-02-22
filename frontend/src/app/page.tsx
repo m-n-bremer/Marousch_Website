@@ -36,7 +36,7 @@ export default async function HomePage() {
             Marousch Brothers Landscaping
           </h1>
           <p className="text-xl md:text-2xl text-[#e6c34d] mb-8 max-w-2xl mx-auto">
-            Professional landscaping and contracting services in Norton, Ohio.
+            Professional landscaping and contracting services in Summit County, Ohio.
             Quality work you can trust.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
@@ -105,7 +105,7 @@ export default async function HomePage() {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Property?</h2>
           <p className="text-[#e6c34d] mb-8 text-lg">
-            Contact us today for a free estimate. We serve Norton, Ohio and surrounding areas.
+            Contact us today for a free estimate. We serve Summit County and surrounding areas.
           </p>
           <Link
             href="/quote"
