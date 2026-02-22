@@ -13,7 +13,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function AdminBookingsPage() {
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<Booking[] | null>(null);
 
   const load = () => { api.get("/bookings/admin").then((r) => setBookings(r.data)); };
   useEffect(() => { load(); }, []);
@@ -25,10 +25,13 @@ export default function AdminBookingsPage() {
   };
 
   const remove = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this?")) return;
     await api.delete(`/bookings/admin/${id}`);
     toast.success("Booking deleted.");
     load();
   };
+
+  if (!bookings) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
 
   return (
     <div>

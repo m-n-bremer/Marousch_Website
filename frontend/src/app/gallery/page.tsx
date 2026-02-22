@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
+import api, { API_BASE } from "@/lib/api";
 import type { GalleryImage } from "@/lib/types";
 
 export default function GalleryPage() {
@@ -53,7 +53,7 @@ export default function GalleryPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((img) => (
             <div key={img.id} className="bg-white rounded-lg overflow-hidden shadow-sm border border-[#d8e4dc]">
-              <img src={`http://localhost:8000${img.image_url}`} alt={img.title || "Gallery"} className="w-full h-64 object-cover" />
+              <img src={`${API_BASE}${img.image_url}`} alt={img.title || "Gallery"} className="w-full h-64 object-cover" />
               {(img.title || img.description) && (
                 <div className="p-4">
                   {img.title && <h3 className="font-semibold text-[#2d6a4f]">{img.title}</h3>}

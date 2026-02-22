@@ -17,12 +17,14 @@ import {
   InboxIcon,
   StarIcon,
   ClipboardDocumentListIcon,
+  BanknotesIcon,
 } from "@heroicons/react/24/outline";
 
 const opsLinks = [
   { href: "/admin/dashboard", label: "Dashboard", icon: HomeIcon },
   { href: "/admin/contacts", label: "Contacts", icon: UserGroupIcon },
   { href: "/admin/work", label: "Work", icon: WrenchScrewdriverIcon },
+  { href: "/admin/invoices", label: "Invoices", icon: BanknotesIcon },
   { href: "/admin/calendar", label: "Calendar", icon: CalendarIcon },
   { href: "/admin/history", label: "History", icon: ClockIcon },
   { href: "/admin/zones", label: "Zones", icon: MapPinIcon },

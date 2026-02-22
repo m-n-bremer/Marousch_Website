@@ -5,13 +5,15 @@ import api from "@/lib/api";
 import type { HistoryRecord, Contact } from "@/lib/types";
 
 export default function HistoryPage() {
-  const [records, setRecords] = useState<HistoryRecord[]>([]);
+  const [records, setRecords] = useState<HistoryRecord[] | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
 
   useEffect(() => {
     api.get("/history").then((r) => setRecords(r.data.records || []));
     api.get("/contacts").then((r) => setContacts(r.data.contacts || []));
   }, []);
+
+  if (!records) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
 
   const contactMap = new Map<string, Contact>();
   contacts.forEach((c) => contactMap.set(c.id, c));

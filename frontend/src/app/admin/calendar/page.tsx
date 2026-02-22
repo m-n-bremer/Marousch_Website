@@ -49,6 +49,7 @@ export default function CalendarPage() {
   };
 
   const deleteJob = async (jobId: number) => {
+    if (!confirm("Are you sure you want to delete this?")) return;
     await api.delete(`/calendar/jobs/${jobId}`);
     load();
   };

@@ -6,13 +6,15 @@ import toast from "react-hot-toast";
 import type { Contact, ZoneNote } from "@/lib/types";
 
 export default function ZonesPage() {
-  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contacts, setContacts] = useState<Contact[] | null>(null);
   const [zones, setZones] = useState<ZoneNote[]>([]);
 
   useEffect(() => {
     api.get("/contacts").then((r) => setContacts(r.data.contacts || []));
     api.get("/zones").then((r) => setZones(r.data.zones || []));
   }, []);
+
+  if (!contacts) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
 
   const getNote = (contactId: string) => zones.find((z) => z.contactId === contactId)?.notes || "";
 

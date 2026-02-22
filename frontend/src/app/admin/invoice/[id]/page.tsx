@@ -51,7 +51,7 @@ export default function InvoicePage({ params }: { params: Promise<{ id: string }
     }
   };
 
-  if (!invoice) return <div className="text-[#636e72]">Loading...</div>;
+  if (!invoice) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
 
   return (
     <div className="max-w-3xl">

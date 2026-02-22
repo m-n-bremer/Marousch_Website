@@ -7,16 +7,19 @@ import toast from "react-hot-toast";
 import type { BlogPost } from "@/lib/types";
 
 export default function AdminBlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [posts, setPosts] = useState<BlogPost[] | null>(null);
 
   const load = () => { api.get("/blog/admin").then((r) => setPosts(r.data)); };
   useEffect(() => { load(); }, []);
 
   const remove = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this?")) return;
     await api.delete(`/blog/${id}`);
     toast.success("Post deleted.");
     load();
   };
+
+  if (!posts) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
 
   return (
     <div>

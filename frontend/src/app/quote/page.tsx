@@ -12,7 +12,7 @@ const schema = z.object({
   client_name: z.string().min(1, "Name is required"),
   client_email: z.string().email("Valid email required"),
   client_phone: z.string().optional(),
-  service_id: z.coerce.number().optional(),
+  service_id: z.string().optional(),
   preferred_date: z.string().optional(),
   preferred_time: z.string().optional(),
   address: z.string().optional(),
@@ -33,7 +33,8 @@ export default function QuotePage() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      await api.post("/bookings", data);
+      const payload = { ...data, service_id: data.service_id ? Number(data.service_id) : undefined };
+      await api.post("/bookings", payload);
       toast.success("Quote request submitted! We'll contact you soon.");
       reset();
     } catch {

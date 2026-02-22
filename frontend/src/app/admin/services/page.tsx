@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import type { Service } from "@/lib/types";
 
 export default function AdminServicesPage() {
-  const [services, setServices] = useState<Service[]>([]);
+  const [services, setServices] = useState<Service[] | null>(null);
   const [editing, setEditing] = useState<Partial<Service> | null>(null);
 
   const load = () => {
@@ -29,10 +29,13 @@ export default function AdminServicesPage() {
   };
 
   const remove = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this?")) return;
     await api.delete(`/services/${id}`);
     toast.success("Service removed.");
     load();
   };
+
+  if (!services) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
 
   return (
     <div>

@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
+import api, { API_BASE } from "@/lib/api";
 import toast from "react-hot-toast";
 import type { GalleryImage } from "@/lib/types";
 
 export default function AdminGalleryPage() {
-  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [images, setImages] = useState<GalleryImage[] | null>(null);
 
   const load = () => { api.get("/gallery").then((r) => setImages(r.data)); };
   useEffect(() => { load(); }, []);
@@ -23,10 +23,13 @@ export default function AdminGalleryPage() {
   };
 
   const remove = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this?")) return;
     await api.delete(`/gallery/${id}`);
     toast.success("Image deleted.");
     load();
   };
+
+  if (!images) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
 
   return (
     <div>
@@ -44,7 +47,7 @@ export default function AdminGalleryPage() {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {images.map((img) => (
           <div key={img.id} className="bg-white rounded-lg overflow-hidden border border-[#d8e4dc]">
-            <img src={`http://localhost:8000${img.image_url}`} alt={img.title || ""} className="w-full h-40 object-cover" />
+            <img src={`${API_BASE}${img.image_url}`} alt={img.title || ""} className="w-full h-40 object-cover" />
             <div className="p-3 flex justify-between items-center">
               <span className="text-sm text-[#2d6a4f] truncate">{img.title || img.category || "Untitled"}</span>
               <button onClick={() => remove(img.id)} className="text-red-500 text-xs hover:text-red-700">Delete</button>

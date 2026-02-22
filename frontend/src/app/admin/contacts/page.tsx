@@ -25,6 +25,7 @@ export default function ContactsPage() {
   };
 
   const removeContact = (idx: number) => {
+    if (!confirm("Are you sure you want to delete this?")) return;
     setContacts((prev) => prev.filter((_, i) => i !== idx));
   };
 

@@ -11,7 +11,7 @@ export default function DashboardPage() {
     api.get("/dashboard").then((r) => setData(r.data)).catch(() => {});
   }, []);
 
-  if (!data) return <div className="text-[#636e72]">Loading...</div>;
+  if (!data) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
 
   const contactMap = new Map<string, Contact>();
   data.contacts.forEach((c) => contactMap.set(c.id, c));

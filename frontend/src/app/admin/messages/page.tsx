@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import type { ContactMessage } from "@/lib/types";
 
 export default function AdminMessagesPage() {
-  const [messages, setMessages] = useState<ContactMessage[]>([]);
+  const [messages, setMessages] = useState<ContactMessage[] | null>(null);
 
   const load = () => { api.get("/contact/admin").then((r) => setMessages(r.data)); };
   useEffect(() => { load(); }, []);
@@ -17,10 +17,13 @@ export default function AdminMessagesPage() {
   };
 
   const remove = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this?")) return;
     await api.delete(`/contact/admin/${id}`);
     toast.success("Message deleted.");
     load();
   };
+
+  if (!messages) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
 
   return (
     <div>
