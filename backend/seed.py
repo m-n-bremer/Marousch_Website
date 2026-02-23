@@ -17,6 +17,7 @@ from app.models.invoice import Invoice
 from app.models.invoice_line_item import InvoiceLineItem
 from app.models.zone_note import ZoneNote
 from app.models.history_record import HistoryRecord
+from app.models.service import Service
 from app.utils.security import hash_password
 
 # Path to existing project data
@@ -180,6 +181,24 @@ def import_history(db):
     print(f"Imported {count} history records.")
 
 
+def seed_services(db):
+    services = [
+        {"title": "Mowing Service", "slug": "mowing", "short_description": "Professional lawn mowing and maintenance to keep your yard looking its best.", "display_order": 1},
+        {"title": "Hard-Scape", "slug": "hardscape", "short_description": "Custom hardscaping including patios, retaining walls, walkways, and outdoor living spaces.", "display_order": 2},
+        {"title": "Tree Service", "slug": "tree", "short_description": "Tree trimming, removal, and stump grinding for a clean and safe property.", "display_order": 3},
+        {"title": "Water Features", "slug": "water-features", "short_description": "Custom water feature design and installation including ponds, fountains, and waterfalls.", "display_order": 4},
+        {"title": "Snow Removal", "slug": "snow-removal", "short_description": "Reliable residential and commercial snow removal services to keep your property safe.", "display_order": 5},
+    ]
+    count = 0
+    for s in services:
+        if db.query(Service).filter(Service.slug == s["slug"]).first():
+            continue
+        db.add(Service(title=s["title"], slug=s["slug"], short_description=s["short_description"], display_order=s["display_order"], is_active=True))
+        count += 1
+    db.commit()
+    print(f"Seeded {count} services.")
+
+
 def main():
     print("=== Marousch Website Seed Script ===\n")
 
@@ -188,14 +207,17 @@ def main():
         print("1. Creating admin user...")
         seed_admin(db)
 
+        print("\n2. Seeding services...")
+        seed_services(db)
+
         if os.path.exists(OLD_DATA_DIR):
-            print("\n2. Importing existing data from Marousch_Professionals...")
+            print("\n3. Importing existing data from Marousch_Professionals...")
             import_contacts(db)
             import_work_data(db)
             import_zones(db)
             import_history(db)
         else:
-            print(f"\n2. No existing data directory found at {OLD_DATA_DIR}, skipping import.")
+            print(f"\n3. No existing data directory found at {OLD_DATA_DIR}, skipping import.")
 
         print("\nSeed complete!")
     finally:
