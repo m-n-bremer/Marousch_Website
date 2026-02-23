@@ -96,7 +96,7 @@ export default function WorkPage() {
                         onChange={() => jc.checked ? uncheckWeek(contact.id, jc.index) : checkWeek(contact.id, jc.index)}
                         className="accent-[#40916c]" />
                       Wk {jc.index + 1}
-                      {jc.dateTime && <span className="text-xs text-[#636e72]">({jc.dateTime.slice(0, 10)})</span>}
+                      {jc.dateTime && <span className="text-xs text-[#636e72]">({new Date(jc.dateTime).toLocaleString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })})</span>}
                     </label>
                   ))}
                 </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
-import type { DashboardData, Contact } from "@/lib/types";
+import type { DashboardData, Contact, CalendarJob } from "@/lib/types";
 
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -57,6 +57,72 @@ export default function DashboardPage() {
           </table>
         </div>
       )}
+      {(() => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth();
+        const monthName = today.toLocaleString("en-US", { month: "long", year: "numeric" });
+
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const startDate = new Date(firstDay);
+        startDate.setDate(startDate.getDate() - startDate.getDay());
+        const endPadded = new Date(lastDay);
+        endPadded.setDate(endPadded.getDate() + (6 - endPadded.getDay()));
+
+        const days: Date[] = [];
+        const cur = new Date(startDate);
+        while (cur <= endPadded) {
+          days.push(new Date(cur));
+          cur.setDate(cur.getDate() + 1);
+        }
+
+        const jobsByDate = new Map<string, CalendarJob[]>();
+        data.upcomingJobs.forEach((j) => {
+          const key = j.date.slice(0, 10);
+          if (!jobsByDate.has(key)) jobsByDate.set(key, []);
+          jobsByDate.get(key)!.push(j);
+        });
+
+        const todayStr = today.toISOString().slice(0, 10);
+
+        return (
+          <>
+            <h2 className="text-xl font-semibold text-[#2d6a4f] mb-4 mt-8">{monthName} — Upcoming Jobs</h2>
+            <div className="bg-white rounded-lg border border-[#d8e4dc] overflow-hidden">
+              <div className="grid grid-cols-7 bg-[#f0f4f1]">
+                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+                  <div key={d} className="p-2 text-center text-xs font-medium text-[#2d3436]">{d}</div>
+                ))}
+              </div>
+              <div className="grid grid-cols-7">
+                {days.map((day) => {
+                  const key = day.toISOString().slice(0, 10);
+                  const jobs = jobsByDate.get(key) || [];
+                  const isToday = key === todayStr;
+                  const isCurrentMonth = day.getMonth() === month;
+
+                  return (
+                    <div key={key} className={`min-h-[80px] p-1 border border-[#eef2ef] ${isToday ? "bg-[#d8f3dc]" : isCurrentMonth ? "bg-white" : "bg-[#f8f9fa]"}`}>
+                      <div className={`text-xs font-medium mb-1 ${isToday ? "text-[#1b4332] font-bold" : isCurrentMonth ? "text-[#2d3436]" : "text-[#b2bec3]"}`}>
+                        {day.getDate()}
+                      </div>
+                      {jobs.map((j) => {
+                        const contact = contactMap.get(j.contactId);
+                        return (
+                          <div key={j.id} className={`text-xs rounded px-1 py-0.5 mb-0.5 truncate ${j.status === "done" ? "bg-[#b7e4c7] text-[#1b4332]" : "bg-[#52b788] text-white"}`}>
+                            {contact ? `${contact.firstName} ${contact.lastName.charAt(0)}.` : j.description || "Job"}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        );
+      })()}
     </div>
   );
 }

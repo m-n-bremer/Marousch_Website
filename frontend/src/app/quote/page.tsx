@@ -68,6 +68,11 @@ export default function QuotePage() {
             <label className="block text-sm font-medium text-[#2d3436] mb-1">Service</label>
             <select {...register("service_id")} className="w-full border border-[#d8e4dc] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#52b788]">
               <option value="">General Inquiry</option>
+              <option value="mowing">Mowing Service</option>
+              <option value="hardscape">Hard-Scape</option>
+              <option value="tree">Tree Service</option>
+              <option value="water-features">Water Features</option>
+              <option value="snow-removal">Snow Removal</option>
               {services.map((s) => <option key={s.id} value={s.id}>{s.title}</option>)}
             </select>
           </div>

@@ -33,7 +33,7 @@ export default async function HomePage() {
       <section className="bg-[#1b4332] text-white py-24 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Marousch Brothers Landscaping
+            Marousch Brothers Landscapes
           </h1>
           <p className="text-xl md:text-2xl text-[#95d5b2] mb-8 max-w-2xl mx-auto">
             Professional landscaping and contracting services in Summit County, Ohio.

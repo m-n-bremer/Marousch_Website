@@ -9,6 +9,7 @@ from app.models.blog_post import BlogPost
 from app.models.booking import Booking
 from app.models.contact import Contact
 from app.models.contact_message import ContactMessage
+from app.models.calendar_job import CalendarJob
 from app.models.work_entry import WorkEntry
 
 router = APIRouter()
@@ -36,6 +37,21 @@ def get_dashboard(db: Session = Depends(get_db), _=Depends(get_current_admin)):
         for c in contacts
     ]
 
+    today = dt.date.today()
+    month_start = today.replace(day=1).isoformat()
+    next_month = (today.replace(day=28) + dt.timedelta(days=4)).replace(day=1)
+    month_end = (next_month - dt.timedelta(days=1)).isoformat()
+    upcoming_jobs = (
+        db.query(CalendarJob)
+        .filter(CalendarJob.date >= month_start, CalendarJob.date <= month_end)
+        .order_by(CalendarJob.date)
+        .all()
+    )
+    upcoming_data = [
+        {"id": j.id, "contactId": j.contact_id, "date": j.date, "description": j.description, "status": j.status}
+        for j in upcoming_jobs
+    ]
+
     return {
         "totalContacts": len(contacts),
         "mowingClients": mowing_clients,
@@ -45,4 +61,5 @@ def get_dashboard(db: Session = Depends(get_db), _=Depends(get_current_admin)):
         "totalBlogPosts": total_blog_posts,
         "todayEntries": entries_data,
         "contacts": contacts_data,
+        "upcomingJobs": upcoming_data,
     }

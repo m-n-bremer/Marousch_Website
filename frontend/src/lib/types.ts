@@ -167,4 +167,5 @@ export interface DashboardData {
   totalBlogPosts: number;
   todayEntries: WorkEntry[];
   contacts: Contact[];
+  upcomingJobs: CalendarJob[];
 }
