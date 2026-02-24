@@ -70,6 +70,17 @@ def add_equipment(req: EquipmentCreate, db: Session = Depends(get_db), _=Depends
     return {"id": eq.id, "name": eq.name}
 
 
+@router.put("/equipment/{equipment_id}")
+def update_equipment(equipment_id: int, req: EquipmentCreate, db: Session = Depends(get_db), _=Depends(get_current_admin)):
+    eq = db.query(Equipment).filter(Equipment.id == equipment_id).first()
+    if not eq:
+        raise HTTPException(status_code=404, detail="Equipment not found")
+    eq.name = req.name
+    db.commit()
+    db.refresh(eq)
+    return {"id": eq.id, "name": eq.name}
+
+
 @router.delete("/equipment/{equipment_id}")
 def delete_equipment(equipment_id: int, db: Session = Depends(get_db), _=Depends(get_current_admin)):
     eq = db.query(Equipment).filter(Equipment.id == equipment_id).first()

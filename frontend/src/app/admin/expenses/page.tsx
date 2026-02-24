@@ -29,6 +29,8 @@ export default function ExpensesPage() {
   const [editingExpense, setEditingExpense] = useState<number | null>(null);
   const [editDesc, setEditDesc] = useState("");
   const [editCost, setEditCost] = useState("");
+  const [editingEquip, setEditingEquip] = useState<number | null>(null);
+  const [editEquipName, setEditEquipName] = useState("");
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(() => {
@@ -48,6 +50,16 @@ export default function ExpensesPage() {
       load();
       toast.success("Equipment added!");
     } catch { toast.error("Failed to add equipment."); }
+  };
+
+  const renameEquipment = async (id: number) => {
+    if (!editEquipName.trim()) return;
+    try {
+      await api.put(`/expenses/equipment/${id}`, { name: editEquipName.trim() });
+      setEditingEquip(null);
+      load();
+      toast.success("Equipment renamed!");
+    } catch { toast.error("Failed to rename."); }
   };
 
   const deleteEquipment = async (id: number) => {
@@ -128,7 +140,21 @@ export default function ExpensesPage() {
           {equipment.map((eq) => (
             <div key={eq.id} className="bg-white rounded-lg border border-[#d8e4dc] overflow-hidden">
               <div className="flex items-center justify-between p-4 bg-[#f0f4f1]">
-                <h3 className="font-semibold text-[#1b4332] text-lg">{eq.name}</h3>
+                {editingEquip === eq.id ? (
+                  <div className="flex items-center gap-2">
+                    <input value={editEquipName} onChange={(e) => setEditEquipName(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && renameEquipment(eq.id)}
+                      className="border border-[#d8e4dc] rounded px-3 py-1 text-sm font-semibold focus:ring-1 focus:ring-[#52b788]" />
+                    <button onClick={() => renameEquipment(eq.id)} className="text-[#2d6a4f] text-sm font-medium hover:text-[#52b788]">Save</button>
+                    <button onClick={() => setEditingEquip(null)} className="text-[#636e72] text-sm hover:text-[#2d3436]">Cancel</button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold text-[#1b4332] text-lg">{eq.name}</h3>
+                    <button onClick={() => { setEditingEquip(eq.id); setEditEquipName(eq.name); }}
+                      className="text-[#636e72] text-xs hover:text-[#2d6a4f]">Edit</button>
+                  </div>
+                )}
                 <div className="flex items-center gap-4">
                   <span className="text-sm font-bold text-[#2d6a4f]">Total: ${eq.total.toFixed(2)}</span>
                   <button onClick={() => deleteEquipment(eq.id)} className="text-red-500 text-sm hover:text-red-700">Delete</button>
