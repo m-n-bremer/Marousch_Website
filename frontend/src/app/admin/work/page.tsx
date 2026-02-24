@@ -76,7 +76,9 @@ export default function WorkPage() {
           const entry = getEntry(contact.id);
           const mowing = entry?.mowing || false;
           const contracting = entry?.contracting || false;
-          const checks = entry?.jobChecks || [0, 1, 2, 3].map((i) => ({ index: i, checked: false, dateTime: null }));
+          const checks = entry?.jobChecks || [0, 1, 2, 3, 4].map((i) => ({ index: i, checked: false, dateTime: null }));
+          // Ensure 5 weeks even if backend returned only 4
+          while (checks.length < 5) checks.push({ index: checks.length, checked: false, dateTime: null });
           const hasChecks = checks.some((jc) => jc.checked);
 
           return (

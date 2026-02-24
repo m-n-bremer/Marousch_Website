@@ -53,7 +53,7 @@ def _find_or_create_entry(db: Session, contact_id: str, target_date: str) -> Wor
         entry = WorkEntry(contact_id=contact_id, date=target_date)
         db.add(entry)
         db.flush()
-        for i in range(4):
+        for i in range(5):
             db.add(JobCheck(work_entry_id=entry.id, week_index=i, checked=False))
         db.flush()
     return entry
