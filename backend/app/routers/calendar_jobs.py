@@ -6,7 +6,9 @@ from sqlalchemy.orm import Session
 from app.dependencies.auth import get_current_admin
 from app.dependencies.database import get_db
 from app.models.calendar_job import CalendarJob
+from app.models.contact import Contact
 from app.schemas.calendar_job import CalendarJobCreate, CalendarJobOut, CalendarJobUpdate
+from app.utils.sms import send_job_reminder_sms
 
 router = APIRouter()
 
@@ -63,3 +65,20 @@ def delete_job(job_id: int, db: Session = Depends(get_db), _=Depends(get_current
     db.delete(job)
     db.commit()
     return {"ok": True}
+
+
+@router.post("/jobs/{job_id}/remind")
+def send_reminder(job_id: int, db: Session = Depends(get_db), _=Depends(get_current_admin)):
+    job = db.query(CalendarJob).filter(CalendarJob.id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    contact = db.query(Contact).filter(Contact.id == job.contact_id).first()
+    if not contact:
+        raise HTTPException(status_code=404, detail="Contact not found")
+    if not contact.primary_phone:
+        raise HTTPException(status_code=400, detail="Contact has no phone number")
+    try:
+        send_job_reminder_sms(contact.first_name, contact.primary_phone, job.date, job.description or "")
+        return {"ok": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -11,10 +11,12 @@ from app.routers import (
     contact_form,
     contacts,
     dashboard,
+    expenses,
     gallery,
     history,
     invoices,
     services,
+    taxes,
     testimonials,
     users,
     work,
@@ -48,3 +50,5 @@ app.include_router(testimonials.router, prefix="/api/testimonials", tags=["Testi
 app.include_router(blog.router, prefix="/api/blog", tags=["Blog"])
 app.include_router(bookings.router, prefix="/api/bookings", tags=["Bookings"])
 app.include_router(contact_form.router, prefix="/api/contact", tags=["Contact Form"])
+app.include_router(taxes.router, prefix="/api/taxes", tags=["Taxes"])
+app.include_router(expenses.router, prefix="/api/expenses", tags=["Expenses"])

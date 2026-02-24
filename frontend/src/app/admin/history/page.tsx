@@ -2,21 +2,26 @@
 
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
-import type { HistoryRecord, Contact } from "@/lib/types";
+import type { HistoryRecord, Contact, Invoice } from "@/lib/types";
 
 export default function HistoryPage() {
   const [records, setRecords] = useState<HistoryRecord[] | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
 
   useEffect(() => {
     api.get("/history").then((r) => setRecords(r.data.records || []));
     api.get("/contacts").then((r) => setContacts(r.data.contacts || []));
+    api.get("/invoices").then((r) => setInvoices(r.data.invoices || []));
   }, []);
 
   if (!records) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
 
   const contactMap = new Map<string, Contact>();
   contacts.forEach((c) => contactMap.set(c.id, c));
+
+  const invoiceMap = new Map<string, Invoice>();
+  invoices.forEach((inv) => invoiceMap.set(inv.invoiceId, inv));
 
   const grouped = new Map<string, HistoryRecord[]>();
   records.forEach((r) => {
@@ -25,8 +30,16 @@ export default function HistoryPage() {
     grouped.set(r.contactId, list);
   });
 
+  const runningTotal = records.reduce((sum, r) => {
+    if (r.invoiceId) {
+      const inv = invoiceMap.get(r.invoiceId);
+      if (inv) return sum + inv.totalAmount;
+    }
+    return sum;
+  }, 0);
+
   return (
-    <div>
+    <div className="pb-20">
       <h1 className="text-3xl font-bold text-[#1b4332] mb-6">History</h1>
       {grouped.size === 0 ? (
         <p className="text-[#636e72] bg-white p-4 rounded-lg border border-[#d8e4dc]">No history records.</p>
@@ -57,6 +70,10 @@ export default function HistoryPage() {
           })}
         </div>
       )}
+
+      <div className="fixed bottom-6 right-6 bg-[#2d6a4f] text-white px-6 py-3 rounded-lg shadow-lg text-lg font-bold">
+        Total: ${runningTotal.toFixed(2)}
+      </div>
     </div>
   );
 }

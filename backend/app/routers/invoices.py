@@ -68,6 +68,10 @@ def update_invoice(invoice_id: str, req: InvoiceUpdateRequest, db: Session = Dep
     invoice.total_amount = sum(li.amount for li in req.lineItems)
     if req.contractingNotes is not None:
         invoice.contracting_notes = req.contractingNotes
+    if req.headline is not None:
+        invoice.headline = req.headline
+    if req.createdDate is not None:
+        invoice.created_date = req.createdDate
     db.commit()
     return {"ok": True, "invoice": _invoice_to_dict(invoice)}
 

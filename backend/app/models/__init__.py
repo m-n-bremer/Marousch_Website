@@ -13,6 +13,7 @@ from app.models.testimonial import Testimonial
 from app.models.blog_post import BlogPost
 from app.models.booking import Booking
 from app.models.contact_message import ContactMessage
+from app.models.equipment import Equipment, Expense
 
 __all__ = [
     "User",
@@ -30,4 +31,6 @@ __all__ = [
     "BlogPost",
     "Booking",
     "ContactMessage",
+    "Equipment",
+    "Expense",
 ]

@@ -9,3 +9,5 @@ class LineItemSchema(BaseModel):
 class InvoiceUpdateRequest(BaseModel):
     lineItems: list[LineItemSchema] = []
     contractingNotes: str | None = None
+    headline: str | None = None
+    createdDate: str | None = None

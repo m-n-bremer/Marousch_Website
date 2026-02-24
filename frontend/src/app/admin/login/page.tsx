@@ -8,6 +8,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
-      await login(email, password);
+      await login(email, password, rememberMe);
       router.push("/admin/dashboard");
     } catch {
       setError("Invalid credentials");
@@ -36,11 +37,16 @@ export default function LoginPage() {
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
             className="w-full border border-[#d8e4dc] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#52b788]" required />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <label className="block text-sm font-medium text-[#2d3436] mb-1">Password</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
             className="w-full border border-[#d8e4dc] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#52b788]" required />
         </div>
+        <label className="flex items-center gap-2 mb-6 text-sm text-[#2d3436] cursor-pointer">
+          <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)}
+            className="accent-[#2d6a4f]" />
+          Remember me for 30 days
+        </label>
         <button type="submit" disabled={loading}
           className="w-full bg-[#2d6a4f] hover:bg-[#1b4332] text-white py-3 rounded-lg font-semibold transition-colors disabled:opacity-50">
           {loading ? "Signing in..." : "Sign In"}

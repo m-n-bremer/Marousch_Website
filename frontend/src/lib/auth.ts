@@ -2,10 +2,10 @@ import Cookies from "js-cookie";
 import api from "./api";
 import type { User } from "./types";
 
-export async function login(email: string, password: string): Promise<string> {
+export async function login(email: string, password: string, rememberMe?: boolean): Promise<string> {
   const res = await api.post("/auth/login", { email, password });
   const token = res.data.access_token;
-  Cookies.set("token", token, { expires: 1 });
+  Cookies.set("token", token, { expires: rememberMe ? 30 : 1 });
   return token;
 }
 

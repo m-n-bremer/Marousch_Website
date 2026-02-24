@@ -158,6 +158,14 @@ export interface User {
   created_at: string;
 }
 
+export interface AnalyticsData {
+  totalInvoiced: number;
+  invoiceCount: number;
+  monthlyRevenue: Record<string, number>;
+  mowingJobCount: number;
+  contractingJobCount: number;
+}
+
 export interface DashboardData {
   totalContacts: number;
   mowingClients: number;

@@ -10,6 +10,7 @@ from app.models.booking import Booking
 from app.models.contact import Contact
 from app.models.contact_message import ContactMessage
 from app.models.calendar_job import CalendarJob
+from app.models.invoice import Invoice
 from app.models.work_entry import WorkEntry
 
 router = APIRouter()
@@ -62,4 +63,28 @@ def get_dashboard(db: Session = Depends(get_db), _=Depends(get_current_admin)):
         "todayEntries": entries_data,
         "contacts": contacts_data,
         "upcomingJobs": upcoming_data,
+    }
+
+
+@router.get("/analytics")
+def get_analytics(db: Session = Depends(get_db), _=Depends(get_current_admin)):
+    sent_invoices = db.query(Invoice).filter(Invoice.sent == True).all()
+    total_invoiced = sum(inv.total_amount for inv in sent_invoices)
+    invoice_count = len(sent_invoices)
+
+    monthly_revenue: dict[str, float] = {}
+    for inv in sent_invoices:
+        month_key = inv.created_date[:7] if inv.created_date else "Unknown"
+        monthly_revenue[month_key] = monthly_revenue.get(month_key, 0) + inv.total_amount
+
+    all_entries = db.query(WorkEntry).all()
+    mowing_count = sum(1 for e in all_entries if e.mowing)
+    contracting_count = sum(1 for e in all_entries if e.contracting)
+
+    return {
+        "totalInvoiced": total_invoiced,
+        "invoiceCount": invoice_count,
+        "monthlyRevenue": monthly_revenue,
+        "mowingJobCount": mowing_count,
+        "contractingJobCount": contracting_count,
     }

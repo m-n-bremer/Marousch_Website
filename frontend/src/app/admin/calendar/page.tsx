@@ -5,6 +5,18 @@ import api from "@/lib/api";
 import toast from "react-hot-toast";
 import type { Contact, CalendarJob } from "@/lib/types";
 
+const statusColors: Record<string, string> = {
+  scheduled: "bg-blue-100 text-blue-800",
+  completed: "bg-[#b7e4c7] text-[#1b4332]",
+  cancelled: "bg-red-100 text-red-800",
+};
+
+const calendarCellColors: Record<string, string> = {
+  scheduled: "bg-blue-100 text-blue-900",
+  completed: "bg-[#b7e4c7] text-[#1b4332]",
+  cancelled: "bg-red-100 text-red-800",
+};
+
 export default function CalendarPage() {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -14,6 +26,10 @@ export default function CalendarPage() {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [newJobContact, setNewJobContact] = useState("");
   const [newJobDesc, setNewJobDesc] = useState("");
+  const [editingJob, setEditingJob] = useState<number | null>(null);
+  const [editDesc, setEditDesc] = useState("");
+  const [editStatus, setEditStatus] = useState("");
+  const [editDate, setEditDate] = useState("");
 
   const load = useCallback(() => {
     api.get(`/calendar/month?year=${year}&month=${month}`).then((r) => setJobs(r.data.jobs || []));
@@ -54,6 +70,31 @@ export default function CalendarPage() {
     load();
   };
 
+  const startEdit = (job: CalendarJob) => {
+    setEditingJob(job.id);
+    setEditDesc(job.description || "");
+    setEditStatus(job.status);
+    setEditDate(job.date);
+  };
+
+  const cancelEdit = () => setEditingJob(null);
+
+  const sendReminder = async (jobId: number) => {
+    try {
+      await api.post(`/calendar/jobs/${jobId}/remind`);
+      toast.success("Reminder sent!");
+    } catch { toast.error("Failed to send reminder."); }
+  };
+
+  const updateJob = async (jobId: number) => {
+    try {
+      await api.put(`/calendar/jobs/${jobId}`, { description: editDesc, status: editStatus, date: editDate });
+      setEditingJob(null);
+      load();
+      toast.success("Job updated!");
+    } catch { toast.error("Failed to update job."); }
+  };
+
   return (
     <div>
       <h1 className="text-3xl font-bold text-[#1b4332] mb-6">Calendar</h1>
@@ -80,8 +121,9 @@ export default function CalendarPage() {
               <span className="text-sm font-medium">{day}</span>
               {dayJobs.map((j) => {
                 const c = contactMap.get(j.contactId);
+                const colorClass = calendarCellColors[j.status] || "bg-[#b7e4c7] text-[#1b4332]";
                 return (
-                  <div key={j.id} className="text-xs bg-[#b7e4c7] text-[#1b4332] rounded px-1 mt-1 truncate">
+                  <div key={j.id} className={`text-xs rounded px-1 mt-1 truncate ${colorClass}`}>
                     {c ? c.firstName : "?"}: {j.description || "Job"}
                   </div>
                 );
@@ -98,10 +140,41 @@ export default function CalendarPage() {
           </h3>
           {getJobsForDay(selectedDay).map((j) => {
             const c = contactMap.get(j.contactId);
+            if (editingJob === j.id) {
+              return (
+                <div key={j.id} className="py-3 border-b border-[#d8e4dc] space-y-2">
+                  <div className="flex gap-2">
+                    <input value={editDesc} onChange={(e) => setEditDesc(e.target.value)} placeholder="Description"
+                      className="flex-1 border border-[#d8e4dc] rounded px-3 py-1.5 text-sm" />
+                    <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)}
+                      className="border border-[#d8e4dc] rounded px-3 py-1.5 text-sm">
+                      <option value="scheduled">Scheduled</option>
+                      <option value="completed">Completed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                    <input type="date" value={editDate} onChange={(e) => setEditDate(e.target.value)}
+                      className="border border-[#d8e4dc] rounded px-3 py-1.5 text-sm" />
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => updateJob(j.id)} className="bg-[#2d6a4f] text-white px-3 py-1 rounded text-sm hover:bg-[#1b4332]">Save</button>
+                    <button onClick={cancelEdit} className="bg-white border border-[#d8e4dc] px-3 py-1 rounded text-sm hover:bg-[#f0f4f1]">Cancel</button>
+                  </div>
+                </div>
+              );
+            }
             return (
               <div key={j.id} className="flex items-center justify-between py-2 border-b border-[#d8e4dc]">
-                <span>{c ? `${c.firstName} ${c.lastName}` : j.contactId} — {j.description || "No description"}</span>
-                <button onClick={() => deleteJob(j.id)} className="text-red-500 text-sm hover:text-red-700">Delete</button>
+                <div className="flex items-center gap-2">
+                  <span>{c ? `${c.firstName} ${c.lastName}` : j.contactId} — {j.description || "No description"}</span>
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[j.status] || "bg-gray-100 text-gray-600"}`}>
+                    {j.status}
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => sendReminder(j.id)} className="text-blue-600 text-sm hover:text-blue-800">Remind</button>
+                  <button onClick={() => startEdit(j)} className="text-[#2d6a4f] text-sm hover:text-[#52b788]">Edit</button>
+                  <button onClick={() => deleteJob(j.id)} className="text-red-500 text-sm hover:text-red-700">Delete</button>
+                </div>
               </div>
             );
           })}

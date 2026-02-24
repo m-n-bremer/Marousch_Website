@@ -18,6 +18,8 @@ import {
   StarIcon,
   ClipboardDocumentListIcon,
   BanknotesIcon,
+  CalculatorIcon,
+  CurrencyDollarIcon,
 } from "@heroicons/react/24/outline";
 
 const opsLinks = [
@@ -27,6 +29,8 @@ const opsLinks = [
   { href: "/admin/invoices", label: "Invoices", icon: BanknotesIcon },
   { href: "/admin/calendar", label: "Calendar", icon: CalendarIcon },
   { href: "/admin/history", label: "History", icon: ClockIcon },
+  { href: "/admin/expenses", label: "Expenses", icon: CurrencyDollarIcon },
+  { href: "/admin/taxes", label: "Taxes", icon: CalculatorIcon },
   { href: "/admin/zones", label: "Zones", icon: MapPinIcon },
 ];
 

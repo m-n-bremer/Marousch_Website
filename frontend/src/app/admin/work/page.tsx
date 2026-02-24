@@ -10,6 +10,7 @@ export default function WorkPage() {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [entries, setEntries] = useState<WorkEntry[]>([]);
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [search, setSearch] = useState("");
   const router = useRouter();
 
   const load = useCallback(() => {
@@ -21,8 +22,8 @@ export default function WorkPage() {
 
   const getEntry = (contactId: string) => entries.find((e) => e.contactId === contactId);
 
-  const saveServices = async (contactId: string, mowing: boolean, contracting: boolean) => {
-    await api.post("/work/save-services", { contactId, date, mowing, contracting });
+  const saveServices = async (contactId: string, mowing: boolean, contracting: boolean, description?: string) => {
+    await api.post("/work/save-services", { contactId, date, mowing, contracting, description });
     load();
   };
 
@@ -58,12 +59,20 @@ export default function WorkPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-[#1b4332]">Work</h1>
-        <input type="date" value={date} onChange={(e) => setDate(e.target.value)}
-          className="border border-[#d8e4dc] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#52b788]" />
+        <div className="flex gap-2">
+          <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search contacts..."
+            className="border border-[#d8e4dc] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#52b788] text-sm" />
+          <input type="date" value={date} onChange={(e) => setDate(e.target.value)}
+            className="border border-[#d8e4dc] rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#52b788]" />
+        </div>
       </div>
 
       <div className="space-y-4">
-        {contacts.map((contact) => {
+        {contacts.filter((c) => {
+          if (!search) return true;
+          const q = search.toLowerCase();
+          return `${c.firstName} ${c.lastName}`.toLowerCase().includes(q);
+        }).map((contact) => {
           const entry = getEntry(contact.id);
           const mowing = entry?.mowing || false;
           const contracting = entry?.contracting || false;
@@ -86,6 +95,12 @@ export default function WorkPage() {
                       className="accent-[#2d6a4f]" /> Contracting
                   </label>
                 </div>
+              </div>
+
+              <div className="mb-3">
+                <input type="text" defaultValue={entry?.description || ""} placeholder="Description (optional)"
+                  onBlur={(e) => { if (e.target.value !== (entry?.description || "")) saveServices(contact.id, mowing, contracting, e.target.value); }}
+                  className="w-full border border-[#d8e4dc] rounded px-3 py-1.5 text-sm focus:ring-1 focus:ring-[#52b788]" />
               </div>
 
               {(mowing || entry) && (

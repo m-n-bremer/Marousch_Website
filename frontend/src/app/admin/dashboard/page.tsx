@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
-import type { DashboardData, Contact, CalendarJob } from "@/lib/types";
+import type { DashboardData, AnalyticsData, Contact, CalendarJob } from "@/lib/types";
 
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
 
   useEffect(() => {
     api.get("/dashboard").then((r) => setData(r.data)).catch(() => {});
+    api.get("/dashboard/analytics").then((r) => setAnalytics(r.data)).catch(() => {});
   }, []);
 
   if (!data) return <div className="flex items-center justify-center py-12"><div className="h-8 w-8 animate-spin rounded-full border-4 border-[#d8e4dc] border-t-[#2d6a4f]" /></div>;
@@ -27,7 +29,53 @@ export default function DashboardPage() {
         <StatCard label="Pending Bookings" value={data.pendingBookings} />
         <StatCard label="Unread Messages" value={data.unreadMessages} />
         <StatCard label="Blog Posts" value={data.totalBlogPosts} />
+        {analytics && (
+          <>
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-[#d8e4dc]">
+              <p className="text-sm text-[#636e72]">Total Revenue</p>
+              <p className="text-2xl font-bold text-[#2d6a4f]">${analytics.totalInvoiced.toFixed(2)}</p>
+            </div>
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-[#d8e4dc]">
+              <p className="text-sm text-[#636e72]">Total Invoices</p>
+              <p className="text-2xl font-bold text-[#2d6a4f]">{analytics.invoiceCount}</p>
+            </div>
+          </>
+        )}
       </div>
+
+      {analytics && Object.keys(analytics.monthlyRevenue).length > 0 && (() => {
+        const entries = Object.entries(analytics.monthlyRevenue).sort(([a], [b]) => a.localeCompare(b));
+        const maxVal = Math.max(...entries.map(([, v]) => v));
+        return (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-[#2d6a4f] mb-4">Monthly Revenue</h2>
+            <div className="bg-white rounded-lg border border-[#d8e4dc] p-4 space-y-3">
+              {entries.map(([month, amount]) => (
+                <div key={month} className="flex items-center gap-3">
+                  <span className="text-sm text-[#636e72] w-20 flex-shrink-0">{month}</span>
+                  <div className="flex-1 bg-[#f0f4f1] rounded-full h-6 overflow-hidden">
+                    <div className="bg-[#52b788] h-full rounded-full transition-all" style={{ width: `${(amount / maxVal) * 100}%` }} />
+                  </div>
+                  <span className="text-sm font-medium text-[#1b4332] w-24 text-right">${amount.toFixed(2)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
+      {analytics && (
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="bg-white rounded-lg p-4 shadow-sm border border-[#d8e4dc]">
+            <p className="text-sm text-[#636e72]">Total Mowing Jobs</p>
+            <p className="text-2xl font-bold text-[#40916c]">{analytics.mowingJobCount}</p>
+          </div>
+          <div className="bg-white rounded-lg p-4 shadow-sm border border-[#d8e4dc]">
+            <p className="text-sm text-[#636e72]">Total Contracting Jobs</p>
+            <p className="text-2xl font-bold text-[#636e72]">{analytics.contractingJobCount}</p>
+          </div>
+        </div>
+      )}
 
       <h2 className="text-xl font-semibold text-[#2d6a4f] mb-4">Today&apos;s Work</h2>
       {data.todayEntries.length === 0 ? (

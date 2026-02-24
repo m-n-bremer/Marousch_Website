@@ -30,3 +30,13 @@ def send_invoice_sms(contact_name: str, contact_phone: str, invoice: dict, invoi
         f"Thank you for your business!"
     )
     return send_sms(contact_phone, body)
+
+
+def send_job_reminder_sms(contact_name: str, contact_phone: str, job_date: str, job_description: str) -> str:
+    body = (
+        f"Hi {contact_name}, this is a reminder about your upcoming job:\n\n"
+        f"Date: {job_date}\n"
+        f"Details: {job_description or 'Scheduled service'}\n\n"
+        f"Thank you — Marousch Brothers Landscaping"
+    )
+    return send_sms(contact_phone, body)

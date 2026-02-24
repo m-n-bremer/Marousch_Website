@@ -8,6 +8,8 @@ import type { Invoice, Contact } from "@/lib/types";
 export default function InvoicesPage() {
   const [invoices, setInvoices] = useState<Invoice[] | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "sent" | "draft">("all");
 
   useEffect(() => {
     api.get("/invoices").then((r) => setInvoices(r.data.invoices || []));
@@ -21,7 +23,19 @@ export default function InvoicesPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-[#1b4332] mb-6">Invoices</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-[#1b4332]">Invoices</h1>
+        <div className="flex gap-2">
+          <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by contact..."
+            className="border border-[#d8e4dc] rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#52b788]" />
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as "all" | "sent" | "draft")}
+            className="border border-[#d8e4dc] rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#52b788]">
+            <option value="all">All</option>
+            <option value="sent">Sent</option>
+            <option value="draft">Draft</option>
+          </select>
+        </div>
+      </div>
       {invoices.length === 0 ? (
         <p className="text-[#636e72] bg-white p-4 rounded-lg border border-[#d8e4dc]">No invoices yet.</p>
       ) : (
@@ -38,7 +52,16 @@ export default function InvoicesPage() {
               </tr>
             </thead>
             <tbody>
-              {invoices.map((inv) => {
+              {invoices.filter((inv) => {
+                if (statusFilter === "sent" && !inv.sent) return false;
+                if (statusFilter === "draft" && inv.sent) return false;
+                if (search) {
+                  const c = contactMap.get(inv.contactId);
+                  const name = c ? `${c.firstName} ${c.lastName}` : inv.contactId;
+                  if (!name.toLowerCase().includes(search.toLowerCase())) return false;
+                }
+                return true;
+              }).map((inv) => {
                 const contact = contactMap.get(inv.contactId);
                 return (
                   <tr key={inv.invoiceId} className="border-t border-[#d8e4dc]">

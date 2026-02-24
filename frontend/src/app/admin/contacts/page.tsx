@@ -7,6 +7,7 @@ import type { Contact } from "@/lib/types";
 
 export default function ContactsPage() {
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [search, setSearch] = useState("");
 
   const load = useCallback(() => {
     api.get("/contacts").then((r) => setContacts(r.data.contacts || [])).catch(() => {});
@@ -43,6 +44,10 @@ export default function ContactsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-[#1b4332]">Contacts</h1>
         <div className="flex gap-2">
+          <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search..."
+            className="border border-[#d8e4dc] rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#52b788]" />
+        </div>
+        <div className="flex gap-2">
           <button onClick={addContact} className="bg-[#52b788] hover:bg-[#40916c] text-white px-4 py-2 rounded-lg text-sm font-medium">+ Add Contact</button>
           <button onClick={save} className="bg-[#2d6a4f] hover:bg-[#1b4332] text-white px-4 py-2 rounded-lg text-sm font-medium">Save Changes</button>
         </div>
@@ -58,7 +63,13 @@ export default function ContactsPage() {
             </tr>
           </thead>
           <tbody>
-            {contacts.map((c, i) => (
+            {contacts.map((c, i) => ({ c, i })).filter(({ c }) => {
+              if (!search) return true;
+              const q = search.toLowerCase();
+              return `${c.firstName} ${c.lastName}`.toLowerCase().includes(q)
+                || c.primaryPhone.toLowerCase().includes(q)
+                || c.address.toLowerCase().includes(q);
+            }).map(({ c, i }) => (
               <tr key={c.id} className="border-t border-[#d8e4dc]">
                 <td className="p-2"><input value={c.firstName} onChange={(e) => updateField(i, "firstName", e.target.value)}
                   className="w-full border border-[#d8e4dc] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#52b788]" /></td>

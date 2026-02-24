@@ -7,7 +7,7 @@ import type { User } from "@/lib/types";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
   logout: () => void;
 }
 
@@ -28,8 +28,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const login = async (email: string, password: string) => {
-    await authLogin(email, password);
+  const login = async (email: string, password: string, rememberMe?: boolean) => {
+    await authLogin(email, password, rememberMe);
     const u = await fetchCurrentUser();
     setUser(u);
   };
