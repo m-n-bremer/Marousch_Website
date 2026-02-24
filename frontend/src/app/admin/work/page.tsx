@@ -105,7 +105,7 @@ export default function WorkPage() {
                   className="w-full border border-[#d8e4dc] rounded px-3 py-1.5 text-sm focus:ring-1 focus:ring-[#52b788]" />
               </div>
 
-              {(mowing || entry) && (
+              {(mowing || checks.some((jc) => jc.checked)) && (
                 <div className="flex items-center gap-4 mb-3">
                   {checks.map((jc) => (
                     <label key={jc.index} className="flex items-center gap-1 text-sm">
