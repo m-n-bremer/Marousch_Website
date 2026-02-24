@@ -26,6 +26,9 @@ export default function ExpensesPage() {
   const [addingTo, setAddingTo] = useState<number | null>(null);
   const [newDesc, setNewDesc] = useState("");
   const [newCost, setNewCost] = useState("");
+  const [editingExpense, setEditingExpense] = useState<number | null>(null);
+  const [editDesc, setEditDesc] = useState("");
+  const [editCost, setEditCost] = useState("");
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(() => {
@@ -57,18 +60,41 @@ export default function ExpensesPage() {
 
   const addExpense = async (equipmentId: number) => {
     const cost = parseFloat(newCost);
-    if (!newDesc.trim() || isNaN(cost) || cost <= 0) {
-      toast.error("Enter a description and valid cost.");
-      return;
-    }
+    if (!newDesc.trim() || isNaN(cost) || cost <= 0) return;
     try {
       await api.post("/expenses/expense", { equipmentId, description: newDesc.trim(), cost });
-      setAddingTo(null);
       setNewDesc("");
       setNewCost("");
       load();
-      toast.success("Expense added!");
+      toast.success("Expense saved!");
     } catch { toast.error("Failed to add expense."); }
+  };
+
+  const handleNewBlur = (equipmentId: number) => {
+    const cost = parseFloat(newCost);
+    if (newDesc.trim() && !isNaN(cost) && cost > 0) {
+      addExpense(equipmentId);
+    }
+  };
+
+  const startEdit = (exp: ExpenseItem) => {
+    setEditingExpense(exp.id);
+    setEditDesc(exp.description);
+    setEditCost(exp.cost.toString());
+  };
+
+  const saveEdit = async (expenseId: number) => {
+    const cost = parseFloat(editCost);
+    if (!editDesc.trim() || isNaN(cost) || cost <= 0) {
+      toast.error("Enter a valid description and cost.");
+      return;
+    }
+    try {
+      await api.put(`/expenses/expense/${expenseId}`, { description: editDesc.trim(), cost });
+      setEditingExpense(null);
+      load();
+      toast.success("Expense updated!");
+    } catch { toast.error("Failed to update expense."); }
   };
 
   const deleteExpense = async (id: number) => {
@@ -116,20 +142,47 @@ export default function ExpensesPage() {
                       <th className="text-left p-3 text-xs font-medium text-[#636e72]">Description</th>
                       <th className="text-right p-3 text-xs font-medium text-[#636e72] w-28">Cost</th>
                       <th className="text-right p-3 text-xs font-medium text-[#636e72] w-36">Date</th>
-                      <th className="w-16 p-3"></th>
+                      <th className="w-32 p-3"></th>
                     </tr>
                   </thead>
                   <tbody>
                     {eq.expenses.map((exp, i) => (
                       <tr key={exp.id} className={`border-b border-[#d8e4dc] last:border-0 ${i % 2 === 1 ? "bg-[#f8faf9]" : ""}`}>
-                        <td className="p-3 text-sm">{exp.description}</td>
-                        <td className="p-3 text-sm text-right font-medium">${exp.cost.toFixed(2)}</td>
-                        <td className="p-3 text-sm text-right text-[#636e72]">
-                          {new Date(exp.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                        </td>
-                        <td className="p-3 text-right">
-                          <button onClick={() => deleteExpense(exp.id)} className="text-red-400 text-xs hover:text-red-600">Remove</button>
-                        </td>
+                        {editingExpense === exp.id ? (
+                          <>
+                            <td className="p-2">
+                              <input value={editDesc} onChange={(e) => setEditDesc(e.target.value)}
+                                className="w-full border border-[#d8e4dc] rounded px-2 py-1 text-sm focus:ring-1 focus:ring-[#52b788]" />
+                            </td>
+                            <td className="p-2">
+                              <input type="number" value={editCost} onChange={(e) => setEditCost(e.target.value)} step="0.01" min="0"
+                                className="w-full border border-[#d8e4dc] rounded px-2 py-1 text-sm text-right focus:ring-1 focus:ring-[#52b788]" />
+                            </td>
+                            <td className="p-2 text-sm text-right text-[#636e72]">
+                              {new Date(exp.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                            </td>
+                            <td className="p-2 text-right">
+                              <div className="flex gap-1 justify-end">
+                                <button onClick={() => saveEdit(exp.id)} className="text-[#2d6a4f] text-xs font-medium hover:text-[#52b788]">Save</button>
+                                <button onClick={() => setEditingExpense(null)} className="text-[#636e72] text-xs hover:text-[#2d3436]">Cancel</button>
+                              </div>
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="p-3 text-sm">{exp.description}</td>
+                            <td className="p-3 text-sm text-right font-medium">${exp.cost.toFixed(2)}</td>
+                            <td className="p-3 text-sm text-right text-[#636e72]">
+                              {new Date(exp.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                            </td>
+                            <td className="p-3 text-right">
+                              <div className="flex gap-2 justify-end">
+                                <button onClick={() => startEdit(exp)} className="text-[#2d6a4f] text-xs hover:text-[#52b788]">Edit</button>
+                                <button onClick={() => deleteExpense(exp.id)} className="text-red-400 text-xs hover:text-red-600">Remove</button>
+                              </div>
+                            </td>
+                          </>
+                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -140,10 +193,13 @@ export default function ExpensesPage() {
                 {addingTo === eq.id ? (
                   <div className="flex gap-2">
                     <input value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder="Description"
+                      onBlur={() => handleNewBlur(eq.id)}
                       className="flex-1 border border-[#d8e4dc] rounded px-3 py-1.5 text-sm focus:ring-1 focus:ring-[#52b788]" />
                     <input type="number" value={newCost} onChange={(e) => setNewCost(e.target.value)} placeholder="Cost" step="0.01" min="0"
+                      onBlur={() => handleNewBlur(eq.id)}
+                      onKeyDown={(e) => e.key === "Enter" && addExpense(eq.id)}
                       className="w-28 border border-[#d8e4dc] rounded px-3 py-1.5 text-sm text-right focus:ring-1 focus:ring-[#52b788]" />
-                    <button onClick={() => addExpense(eq.id)} className="bg-[#52b788] hover:bg-[#40916c] text-white px-3 py-1.5 rounded text-sm">Add</button>
+                    <button onClick={() => addExpense(eq.id)} className="bg-[#52b788] hover:bg-[#40916c] text-white px-3 py-1.5 rounded text-sm">Save</button>
                     <button onClick={() => { setAddingTo(null); setNewDesc(""); setNewCost(""); }}
                       className="bg-white border border-[#d8e4dc] px-3 py-1.5 rounded text-sm hover:bg-[#f0f4f1]">Cancel</button>
                   </div>

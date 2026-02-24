@@ -19,6 +19,11 @@ class ExpenseCreate(BaseModel):
     cost: float
 
 
+class ExpenseUpdate(BaseModel):
+    description: str | None = None
+    cost: float | None = None
+
+
 @router.get("/")
 def list_equipment(db: Session = Depends(get_db), _=Depends(get_current_admin)):
     equipment = db.query(Equipment).order_by(Equipment.name).all()
@@ -82,6 +87,20 @@ def add_expense(req: ExpenseCreate, db: Session = Depends(get_db), _=Depends(get
         raise HTTPException(status_code=404, detail="Equipment not found")
     exp = Expense(equipment_id=req.equipmentId, description=req.description, cost=req.cost)
     db.add(exp)
+    db.commit()
+    db.refresh(exp)
+    return {"id": exp.id, "description": exp.description, "cost": exp.cost}
+
+
+@router.put("/expense/{expense_id}")
+def update_expense(expense_id: int, req: ExpenseUpdate, db: Session = Depends(get_db), _=Depends(get_current_admin)):
+    exp = db.query(Expense).filter(Expense.id == expense_id).first()
+    if not exp:
+        raise HTTPException(status_code=404, detail="Expense not found")
+    if req.description is not None:
+        exp.description = req.description
+    if req.cost is not None:
+        exp.cost = req.cost
     db.commit()
     db.refresh(exp)
     return {"id": exp.id, "description": exp.description, "cost": exp.cost}
